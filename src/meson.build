@@ -6,10 +6,10 @@ bxt_launcher_sources = [
 ]
 
 bxt_launcher_deps = [
-  dependency('gio-2.0', version: '>= 2.56'),
-  dependency('gtk+-3.0', version: '>= 3.22'),
-  dependency('gee-0.8', version: '>= 0.20'),
-  dependency('libgtop-2.0', version: '>= 2.34.0'),
+  dependency('gio-2.0', version: '>= 2.48'),
+  dependency('gtk+-3.0', version: '>= 3.18'),
+  dependency('gee-0.8', version: '>= 0.18'),
+  dependency('libgtop-2.0', version: '>= 2.32'),
   valac.find_library('posix'),
 ]
 
@@ -21,7 +21,7 @@ bxt_launcher_sources += gnome.compile_resources('bxt_launcher-resources',
 )
 
 vala_args = [
-  '--target-glib=2.56',
+  '--target-glib=2.48',
   '--vapidir=' + vapi_dir,
 ]
 
