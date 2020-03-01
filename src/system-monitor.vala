@@ -56,13 +56,13 @@ namespace BxtLauncher
              * and the new ones, i.e. the one that got added and removed */
             GTop.Proclist proclist;
             var pids = GTop.get_proclist (out proclist, process_mode);
-            intptr[] old = (intptr[]) process_table.get_keys_as_array ();
+            var old = (ssize_t[]) process_table.get_keys_as_array ();
 
             size_t new_len = (size_t) proclist.number;
             size_t old_len = process_table.length;
 
             sort_pids (pids, sizeof (GLib.Pid), new_len);
-            sort_pids (old, sizeof (intptr), old_len);
+            sort_pids (old, sizeof (ssize_t), old_len);
 
             debug ("new_len: %lu, old_len: %lu\n", new_len, old_len);
             uint removed = 0;
