@@ -89,7 +89,12 @@ namespace BxtLauncher {
                 }
 
                 // Close this Half-Life instance.
-                Posix.kill (process.pid, Posix.Signal.TERM);
+#if VALA_0_40
+                var sigterm = Posix.Signal.TERM;
+#else
+                var sigterm = Posix.SIGTERM;
+#endif
+                Posix.kill (process.pid, sigterm);
 
                 if (hl_pwd != null) {
                     monitor.on_process_removed.connect (process_removed_cb);
