@@ -56,8 +56,9 @@ namespace BxtLauncher
             var file = File.new_for_path (@"/proc/$pid/environ");
             var env = new HashMap<string, string> ();
 
-            var bytes = file.load_bytes ();
-            var data = bytes.get_data ();
+            uint8[] data;
+            string etag_out;
+            file.load_contents (null, out data, out etag_out);
 
             var start = 0;
             for (int i = 0; i < data.length; i++) {
