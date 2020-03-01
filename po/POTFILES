@@ -1,0 +1,7 @@
+data/yalter.BxtLauncher.desktop.in
+data/yalter.BxtLauncher.appdata.xml.in
+data/yalter.BxtLauncher.gschema.xml
+src/window.ui
+src/main.vala
+src/window.vala
+

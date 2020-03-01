@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="bxt-launcher">
+	<schema id="yalter.BxtLauncher" path="/yalter/BxtLauncher/">
+	</schema>
+</schemalist>

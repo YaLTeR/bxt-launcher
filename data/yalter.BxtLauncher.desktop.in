@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Bunnymod XT Launcher
+Exec=bxt-launcher
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true
