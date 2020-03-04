@@ -22,11 +22,14 @@ namespace BxtLauncher {
 
         private string? bxt_path { get; set; }
 
+        private Gtk.MessageDialog? dialog { get; set; }
+
         public Window (Gtk.Application app) {
             Object (application: app);
 
             settings = null;
             bxt_path = null;
+            dialog = null;
 
             string path;
             try {
@@ -59,7 +62,27 @@ namespace BxtLauncher {
             }
         }
 
+        private void close_dialog () {
+            if (dialog == null)
+                return;
+
+            dialog.destroy ();
+            dialog = null;
+        }
+
         private void get_hl_environment () {
+            // Spawn a dialog to let the user know what's happening.
+            dialog = new Gtk.MessageDialog (
+                this,
+                Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                Gtk.MessageType.INFO,
+                Gtk.ButtonsType.CANCEL,
+                "Configuring Launch Options"
+            );
+            dialog.secondary_text = "Half-Life will open and then close.";
+            dialog.response.connect (close_dialog);
+            dialog.show ();
+
             var monitor = SystemMonitor.get_default ();
             monitor.on_process_added.connect (process_added_cb);
 
@@ -108,15 +131,15 @@ namespace BxtLauncher {
 #endif
                 Posix.kill (process.pid, sigterm);
 
-                if (hl_pwd != "") {
-                    monitor.on_process_removed.connect (process_removed_cb);
-                }
+                monitor.on_process_removed.connect (process_removed_cb);
             }
         }
 
         private void process_removed_cb (SystemMonitor monitor, Process process) {
             if (process.cmdline == "hl_linux") {
                 monitor.on_process_removed.disconnect (process_removed_cb);
+
+                close_dialog ();
 
                 var hl_pwd = settings.get_string ("hl-pwd");
                 if (hl_pwd != "") {
