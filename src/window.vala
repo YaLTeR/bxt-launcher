@@ -28,13 +28,16 @@ namespace BxtLauncher {
 
             bxt_path = null;
 
+            string path;
             try {
-                var path = FileUtils.read_link ("/proc/self/exe");
-                path = Path.get_dirname (path);
-                bxt_path = Path.build_filename (path, "libBunnymodXT.so");
+                path = FileUtils.read_link ("/proc/self/exe");
             } catch (FileError e) {
-                print ("Error: %s\n", e.message);
+                print ("Error getting the executable path: %s\n", e.message);
+                return;
             }
+
+            path = Path.get_dirname (path);
+            bxt_path = Path.build_filename (path, "libBunnymodXT.so");
         }
 
         [GtkCallback]
