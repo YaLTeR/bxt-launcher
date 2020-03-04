@@ -129,7 +129,7 @@ namespace BxtLauncher {
             requires (bxt_path != null)
             requires (hl_pwd != "")
         {
-            string[] spawn_args = {"./hl_linux"};
+            string[] spawn_args = {"./hl_linux", "-steam"};
             string[] spawn_env = Environ.get ();
 
             var hl_ld_library_path = settings.get_string ("hl-ld-library-path");
