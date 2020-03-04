@@ -21,11 +21,14 @@ namespace BxtLauncher {
         private string? hl_pwd { get; set; }
         private string? hl_ld_library_path { get; set; }
         private string? hl_ld_preload { get; set; }
+        private Settings settings;
+
         private string? bxt_path { get; set; }
 
         public Window (Gtk.Application app) {
             Object (application: app);
 
+            settings = null;
             bxt_path = null;
 
             string path;
@@ -38,6 +41,14 @@ namespace BxtLauncher {
 
             path = Path.get_dirname (path);
             bxt_path = Path.build_filename (path, "libBunnymodXT.so");
+
+            try {
+                var source = new SettingsSchemaSource.from_directory (path, null, false);
+                var schema = source.lookup ("yalter.BxtLauncher", false);
+                settings = new Settings.full (schema, null, null);
+            } catch (Error e) {
+                print ("Error opening schema: %s\n", e.message);
+            }
         }
 
         [GtkCallback]
