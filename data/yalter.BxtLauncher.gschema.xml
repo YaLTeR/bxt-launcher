@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist gettext-domain="bxt-launcher">
-	<schema id="yalter.BxtLauncher" path="/yalter/BxtLauncher/">
-	</schema>
+    <schema id="yalter.BxtLauncher" path="/yalter/BxtLauncher/">
+
+        <key name="hl-pwd" type="s">
+            <default>""</default>
+            <summary>Path to the Half-Life root folder</summary>
+            <description>
+                Path to the folder with the hl_linux binary and the mod folders
+            </description>
+        </key>
+
+        <key name="hl-ld-library-path" type="s">
+            <default>""</default>
+            <summary>LD_LIBRARY_PATH for launching Half-Life</summary>
+            <description>
+                This is the value set by Steam when launching Half-Life normally.
+            </description>
+        </key>
+
+        <key name="hl-ld-preload" type="s">
+            <default>""</default>
+            <summary>LD_PRELOAD for launching Half-Life</summary>
+            <description>
+                This is the value set by Steam when launching Half-Life normally.
+            </description>
+        </key>
+
+    </schema>
 </schemalist>

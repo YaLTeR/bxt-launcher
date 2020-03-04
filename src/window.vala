@@ -18,9 +18,6 @@
 namespace BxtLauncher {
     [GtkTemplate (ui = "/yalter/BxtLauncher/window.ui")]
     public class Window : Gtk.ApplicationWindow {
-        private string? hl_pwd { get; set; }
-        private string? hl_ld_library_path { get; set; }
-        private string? hl_ld_preload { get; set; }
         private Settings settings;
 
         private string? bxt_path { get; set; }
@@ -53,18 +50,16 @@ namespace BxtLauncher {
 
         [GtkCallback]
         private void launch_button_clicked_cb (Gtk.Button button) {
-            if (hl_pwd == null) {
+            var hl_pwd = settings.get_string ("hl-pwd");
+
+            if (hl_pwd == "") {
                 get_hl_environment ();
             } else {
-                launch_hl ();
+                launch_hl (hl_pwd);
             }
         }
 
         private void get_hl_environment () {
-            hl_pwd = null;
-            hl_ld_library_path = null;
-            hl_ld_preload = null;
-
             var monitor = SystemMonitor.get_default ();
             monitor.on_process_added.connect (process_added_cb);
 
@@ -88,6 +83,8 @@ namespace BxtLauncher {
             if (process.cmdline == "hl_linux") {
                 monitor.on_process_added.disconnect (process_added_cb);
 
+                string hl_pwd = "";
+
                 try {
                     var env = process.get_env ();
 
@@ -95,8 +92,9 @@ namespace BxtLauncher {
                         print ("Half-Life environment doesn't have PWD\n");
                     } else {
                         hl_pwd = env["PWD"];
-                        hl_ld_library_path = env["LD_LIBRARY_PATH"];
-                        hl_ld_preload = env["LD_PRELOAD"];
+                        settings.set_string ("hl-pwd", hl_pwd);
+                        settings.set_string ("hl-ld-library-path", env["LD_LIBRARY_PATH"]);
+                        settings.set_string ("hl-ld-preload", env["LD_PRELOAD"]);
                     }
                 } catch (Error e) {
                     print ("Couldn't read the Half-Life environment: %s", e.message);
@@ -110,7 +108,7 @@ namespace BxtLauncher {
 #endif
                 Posix.kill (process.pid, sigterm);
 
-                if (hl_pwd != null) {
+                if (hl_pwd != "") {
                     monitor.on_process_removed.connect (process_removed_cb);
                 }
             }
@@ -119,20 +117,27 @@ namespace BxtLauncher {
         private void process_removed_cb (SystemMonitor monitor, Process process) {
             if (process.cmdline == "hl_linux") {
                 monitor.on_process_removed.disconnect (process_removed_cb);
-                launch_hl ();
+
+                var hl_pwd = settings.get_string ("hl-pwd");
+                if (hl_pwd != "") {
+                    launch_hl (hl_pwd);
+                }
             }
         }
 
-        private void launch_hl ()
-            requires (hl_pwd != null)
+        private void launch_hl (string hl_pwd)
             requires (bxt_path != null)
+            requires (hl_pwd != "")
         {
             string[] spawn_args = {"./hl_linux"};
             string[] spawn_env = Environ.get ();
 
+            var hl_ld_library_path = settings.get_string ("hl-ld-library-path");
+            var hl_ld_preload = settings.get_string ("hl-ld-preload");
+
             // Add BXT in the end: gameoverlayrenderer really doesn't like being after BXT.
             var ld_preload = "";
-            if (hl_ld_preload != null) {
+            if (hl_ld_preload != "") {
                 ld_preload += @"$hl_ld_preload:";
             }
             ld_preload += bxt_path;
@@ -148,7 +153,7 @@ namespace BxtLauncher {
 
                 if (v.has_prefix ("LD_LIBRARY_PATH=")) {
                     found_ld_library_path = true;
-                    if (hl_ld_library_path != null) {
+                    if (hl_ld_library_path != "") {
                         spawn_env[i] = @"LD_LIBRARY_PATH=$hl_ld_library_path";
                     }
                 }
@@ -162,7 +167,7 @@ namespace BxtLauncher {
             if (!found_pwd) {
                 spawn_env += @"PWD=$hl_pwd";
             }
-            if (!found_ld_library_path && hl_ld_library_path != null) {
+            if (!found_ld_library_path && hl_ld_library_path != "") {
                 spawn_env += @"LD_LIBRARY_PATH=$hl_ld_library_path";
             }
             if (!found_ld_preload) {
