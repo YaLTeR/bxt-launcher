@@ -11,30 +11,70 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="title">Bunnymod XT Launcher</property>
+        <property name="has_subtitle">False</property>
         <property name="show_close_button">True</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <property name="margin_left">32</property>
+        <property name="margin_right">32</property>
+        <property name="margin_top">32</property>
+        <property name="margin_bottom">32</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_bottom">32</property>
+            <property name="pixel_size">128</property>
+            <property name="icon_name">input-gaming-symbolic</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_bottom">16</property>
+            <property name="label" translatable="yes">Press the button to start Half-Life with Bunnymod XT.</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkButton" id="launch_button">
-            <property name="label" translatable="yes">Launch</property>
+            <property name="label" translatable="yes">Launch Half-Life</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
             <signal name="clicked" handler="launch_button_clicked_cb" swapped="no"/>
             <style>
               <class name="suggested-action"/>
             </style>
           </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
         </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkLabel" id="label">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label">The launcher is WIP.</property>
-        <attributes>
-          <attribute name="weight" value="bold"/>
-          <attribute name="scale" value="2"/>
-        </attributes>
       </object>
     </child>
   </template>
