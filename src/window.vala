@@ -166,6 +166,22 @@ namespace BxtLauncher {
             requires (bxt_path != null)
             requires (hl_pwd != "")
         {
+            // Check that libBunnymodXT.so is present.
+            var bxt = File.new_for_path (bxt_path);
+            if (!bxt.query_exists ()) {
+                var dialog = new Gtk.MessageDialog (
+                    this,
+                    Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                    Gtk.MessageType.ERROR,
+                    Gtk.ButtonsType.OK,
+                    "Bunnymod XT is Missing"
+                );
+                dialog.secondary_text = @"Make sure that libBunnymodXT.so is in the same folder as the launcher: $(Path.get_dirname (bxt_path))";
+                dialog.run ();
+                dialog.destroy ();
+                return;
+            }
+
             string[] spawn_args = {"./hl_linux", "-steam"};
             string[] spawn_env = Environ.get ();
 
