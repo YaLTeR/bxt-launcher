@@ -47,7 +47,8 @@ namespace BxtLauncher {
                 var schema = source.lookup ("yalter.BxtLauncher", false);
                 settings = new Settings.full (schema, null, null);
             } catch (Error e) {
-                print ("Error opening schema: %s\n", e.message);
+                fatal_error (@"Could not open the settings schema. Make sure the gschemas.compiled file is in the same folder as the launcher.\n\n$(e.message)");
+                return;
             }
         }
 
