@@ -35,7 +35,7 @@ namespace BxtLauncher {
             try {
                 path = FileUtils.read_link ("/proc/self/exe");
             } catch (FileError e) {
-                print ("Error getting the executable path: %s\n", e.message);
+                fatal_error (@"Could not get the launcher executable path.\n\n$(e.message)");
                 return;
             }
 
@@ -68,6 +68,19 @@ namespace BxtLauncher {
 
             dialog.destroy ();
             dialog = null;
+        }
+
+        private void fatal_error (string message) {
+            var dialog = new Gtk.MessageDialog (
+                this,
+                Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                Gtk.MessageType.ERROR,
+                Gtk.ButtonsType.OK,
+                "Fatal Error"
+            );
+            dialog.secondary_text = message;
+            dialog.run ();
+            application.quit ();
         }
 
         private void get_hl_environment () {
