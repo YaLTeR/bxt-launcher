@@ -126,7 +126,7 @@ namespace BxtLauncher {
                 Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
                 Gtk.MessageType.INFO,
                 Gtk.ButtonsType.CANCEL,
-                "Configuring Launch Options"
+                "Configuring Launch Parameters"
             );
             dialog.secondary_text = "Half-Life will open and then close.";
             dialog.response.connect (close_dialog);
@@ -250,7 +250,15 @@ namespace BxtLauncher {
                     null
                 );
             } catch (SpawnError e) {
-                print ("Error: %s\n", e.message);
+                show_error_dialog (
+                    "Failed to Run Half-Life",
+                    @"Please try again. The launch parameters will be re-configured.\n\n$(e.message)"
+                );
+
+                // Resetting hl-pwd triggers the re-configure.
+                settings.set_string ("hl-pwd", "");
+
+                return;
             }
         }
     }
