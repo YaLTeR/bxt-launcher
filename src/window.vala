@@ -113,7 +113,10 @@ namespace BxtLauncher {
                     null
                 );
             } catch (SpawnError e) {
-                print ("Error: %s\n", e.message);
+                show_error_dialog (
+                    "Failed to Run Half-Life",
+                    @"Make sure that Steam is installed.\n\n$(e.message)"
+                );
                 return;
             }
 
