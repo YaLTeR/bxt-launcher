@@ -99,6 +99,28 @@ namespace BxtLauncher {
 
         private void get_hl_environment () {
             var monitor = SystemMonitor.get_default ();
+
+            // Check if Half-Life is already running.
+            var hl = monitor.find_process ("hl_linux");
+            if (hl != null) {
+                var dialog = new Gtk.MessageDialog (
+                    this,
+                    Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                    Gtk.MessageType.INFO,
+                    Gtk.ButtonsType.OK_CANCEL,
+                    "Half-Life is Already Running"
+                );
+                dialog.secondary_text = "Half-Life will be closed and started again.";
+                var response = dialog.run ();
+                dialog.destroy ();
+
+                if (response == Gtk.ResponseType.OK) {
+                    extract_environment_and_launch_hl (hl);
+                }
+
+                return;
+            }
+
             monitor.on_process_added.connect (process_added_cb);
 
             try {
