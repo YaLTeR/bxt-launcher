@@ -1,17 +1,18 @@
+![image](https://user-images.githubusercontent.com/1794388/76060644-c862bf00-5f92-11ea-9603-849f02753bc1.png)
+
 # Bunnymod XT Launcher
 
-A work-in-progress GUI launcher for Bunnymod XT.
+GUI launcher for Bunnymod XT on Linux.
+
+## Usage
+
+1. Download the latest [release](https://github.com/YaLTeR/bxt-launcher/releases).
+1. Extract all files from the archive.
+1. Open bxt-launcher.
 
 ## Building
 
 You will need the Vala compiler and GTK libraries (GIO, GTK, libgtop).
-
-```sh
-meson build
-ninja -C build
-```
-
-## Building for Development
 
 The launcher expects to find its GSettings schema and `libBunnymodXT.so` alongside its binary.
 Installing into a prefix without `DESTDIR` sets everything up:
