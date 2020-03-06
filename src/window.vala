@@ -84,6 +84,19 @@ namespace BxtLauncher {
             application.quit ();
         }
 
+        private void show_error_dialog (string message, string secondary) {
+            var dialog = new Gtk.MessageDialog (
+                this,
+                Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                Gtk.MessageType.ERROR,
+                Gtk.ButtonsType.OK,
+                message
+            );
+            dialog.secondary_text = secondary;
+            dialog.run ();
+            dialog.destroy ();
+        }
+
         private void get_hl_environment () {
             // Spawn a dialog to let the user know what's happening.
             dialog = new Gtk.MessageDialog (
@@ -169,16 +182,10 @@ namespace BxtLauncher {
             // Check that libBunnymodXT.so is present.
             var bxt = File.new_for_path (bxt_path);
             if (!bxt.query_exists ()) {
-                var dialog = new Gtk.MessageDialog (
-                    this,
-                    Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                    Gtk.MessageType.ERROR,
-                    Gtk.ButtonsType.OK,
-                    "Bunnymod XT is Missing"
+                show_error_dialog (
+                    "Bunnymod XT is Missing",
+                    @"Make sure that libBunnymodXT.so is in the same folder as the launcher: $(Path.get_dirname (bxt_path))"
                 );
-                dialog.secondary_text = @"Make sure that libBunnymodXT.so is in the same folder as the launcher: $(Path.get_dirname (bxt_path))";
-                dialog.run ();
-                dialog.destroy ();
                 return;
             }
 
