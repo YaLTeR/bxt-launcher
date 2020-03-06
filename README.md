@@ -2,7 +2,7 @@
 
 # Bunnymod XT Launcher
 
-GUI launcher for Bunnymod XT on Linux.
+GUI launcher for [Bunnymod XT](https://github.com/YaLTeR/BunnymodXT) on Linux.
 
 ## Usage
 
