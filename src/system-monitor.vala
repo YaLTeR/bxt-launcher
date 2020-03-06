@@ -50,6 +50,12 @@ namespace BxtLauncher
             Timeout.add(UPDATE_INTERVAL, update_data);
         }
 
+        public Process? find_process (string cmdline) {
+            return process_table.find ((pid, process) => {
+                return process.cmdline == cmdline;
+            });
+        }
+
         private bool update_data()
         {
             /* Try to find the difference between the old list of pids,
