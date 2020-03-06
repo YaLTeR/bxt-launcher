@@ -98,18 +98,6 @@ namespace BxtLauncher {
         }
 
         private void get_hl_environment () {
-            // Spawn a dialog to let the user know what's happening.
-            dialog = new Gtk.MessageDialog (
-                this,
-                Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                Gtk.MessageType.INFO,
-                Gtk.ButtonsType.CANCEL,
-                "Configuring Launch Options"
-            );
-            dialog.secondary_text = "Half-Life will open and then close.";
-            dialog.response.connect (close_dialog);
-            dialog.show ();
-
             var monitor = SystemMonitor.get_default ();
             monitor.on_process_added.connect (process_added_cb);
 
@@ -126,7 +114,20 @@ namespace BxtLauncher {
                 );
             } catch (SpawnError e) {
                 print ("Error: %s\n", e.message);
+                return;
             }
+
+            // Spawn a dialog to let the user know what's happening.
+            dialog = new Gtk.MessageDialog (
+                this,
+                Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                Gtk.MessageType.INFO,
+                Gtk.ButtonsType.CANCEL,
+                "Configuring Launch Options"
+            );
+            dialog.secondary_text = "Half-Life will open and then close.";
+            dialog.response.connect (close_dialog);
+            dialog.show ();
         }
 
         private void process_added_cb (SystemMonitor monitor, Process process) {
