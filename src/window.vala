@@ -143,15 +143,27 @@ namespace BxtLauncher {
                     var env = process.get_env ();
 
                     if (!env.has_key ("PWD")) {
-                        print ("Half-Life environment doesn't have PWD\n");
+                        close_dialog ();
+
+                        show_error_dialog (
+                            "Failed to Configure Launch Parameters",
+                            "Half-Life environment doesn't contain PWD."
+                        );
                     } else {
                         hl_pwd = env["PWD"];
                         settings.set_string ("hl-pwd", hl_pwd);
                         settings.set_string ("hl-ld-library-path", env["LD_LIBRARY_PATH"]);
                         settings.set_string ("hl-ld-preload", env["LD_PRELOAD"]);
+
+                        monitor.on_process_removed.connect (process_removed_cb);
                     }
                 } catch (Error e) {
-                    print ("Couldn't read the Half-Life environment: %s", e.message);
+                    close_dialog ();
+
+                    show_error_dialog (
+                        "Failed to Configure Launch Parameters",
+                        @"Could not read the Half-Life environment.\n\n$(e.message)"
+                    );
                 }
 
                 // Close this Half-Life instance.
@@ -161,8 +173,6 @@ namespace BxtLauncher {
                 var sigterm = Posix.SIGTERM;
 #endif
                 Posix.kill (process.pid, sigterm);
-
-                monitor.on_process_removed.connect (process_removed_cb);
             }
         }
 
