@@ -87,14 +87,14 @@ namespace BxtLauncher {
         private void show_error_dialog (string message, string secondary) {
             var dialog = new Gtk.MessageDialog (
                 this,
-                Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
                 Gtk.MessageType.ERROR,
                 Gtk.ButtonsType.OK,
                 message
             );
             dialog.secondary_text = secondary;
-            dialog.run ();
-            dialog.destroy ();
+            dialog.response.connect ((dialog, response) => dialog.destroy ());
+            dialog.show ();
         }
 
         private void get_hl_environment () {
