@@ -137,43 +137,50 @@ namespace BxtLauncher {
             if (process.cmdline == "hl_linux") {
                 monitor.on_process_added.disconnect (process_added_cb);
 
-                string hl_pwd = "";
+                extract_environment_and_launch_hl (process);
+            }
+        }
 
-                try {
-                    var env = process.get_env ();
+        private void extract_environment_and_launch_hl (Process process)
+            requires (process.cmdline == "hl_linux")
+        {
+            string hl_pwd = "";
 
-                    if (!env.has_key ("PWD")) {
-                        close_dialog ();
+            try {
+                var env = process.get_env ();
 
-                        show_error_dialog (
-                            "Failed to Configure Launch Parameters",
-                            "Half-Life environment doesn't contain PWD."
-                        );
-                    } else {
-                        hl_pwd = env["PWD"];
-                        settings.set_string ("hl-pwd", hl_pwd);
-                        settings.set_string ("hl-ld-library-path", env["LD_LIBRARY_PATH"]);
-                        settings.set_string ("hl-ld-preload", env["LD_PRELOAD"]);
-
-                        monitor.on_process_removed.connect (process_removed_cb);
-                    }
-                } catch (Error e) {
+                if (!env.has_key ("PWD")) {
                     close_dialog ();
 
                     show_error_dialog (
                         "Failed to Configure Launch Parameters",
-                        @"Could not read the Half-Life environment.\n\n$(e.message)"
+                        "Half-Life environment doesn't contain PWD."
                     );
-                }
+                } else {
+                    hl_pwd = env["PWD"];
+                    settings.set_string ("hl-pwd", hl_pwd);
+                    settings.set_string ("hl-ld-library-path", env["LD_LIBRARY_PATH"]);
+                    settings.set_string ("hl-ld-preload", env["LD_PRELOAD"]);
 
-                // Close this Half-Life instance.
-#if VALA_0_40
-                var sigterm = Posix.Signal.TERM;
-#else
-                var sigterm = Posix.SIGTERM;
-#endif
-                Posix.kill (process.pid, sigterm);
+                    var monitor = SystemMonitor.get_default ();
+                    monitor.on_process_removed.connect (process_removed_cb);
+                }
+            } catch (Error e) {
+                close_dialog ();
+
+                show_error_dialog (
+                    "Failed to Configure Launch Parameters",
+                    @"Could not read the Half-Life environment.\n\n$(e.message)"
+                );
             }
+
+            // Close this Half-Life instance.
+#if VALA_0_40
+            var sigterm = Posix.Signal.TERM;
+#else
+            var sigterm = Posix.SIGTERM;
+#endif
+            Posix.kill (process.pid, sigterm);
         }
 
         private void process_removed_cb (SystemMonitor monitor, Process process) {
