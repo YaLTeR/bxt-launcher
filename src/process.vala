@@ -18,7 +18,6 @@
  *
  * Authors: Petr Štětka <pstetka@redhat.com>
  */
-using Gee;
 
 namespace BxtLauncher
 {
@@ -51,10 +50,10 @@ namespace BxtLauncher
             return proc_time.start_time;
         }
 
-        public HashMap<string, string> get_env () throws Error
+        public HashTable<string, string> get_env () throws Error
         {
             var file = File.new_for_path (@"/proc/$pid/environ");
-            var env = new HashMap<string, string> ();
+            var env = new HashTable<string, string> (str_hash, str_equal);
 
             uint8[] data;
             string etag_out;

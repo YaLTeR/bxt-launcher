@@ -171,7 +171,7 @@ namespace BxtLauncher {
             try {
                 var env = process.get_env ();
 
-                if (!env.has_key ("PWD")) {
+                if (!env.contains ("PWD")) {
                     close_dialog ();
 
                     show_error_dialog (
