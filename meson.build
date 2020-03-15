@@ -7,7 +7,8 @@ project('bxt-launcher', ['c', 'vala'],
 
 valac = meson.get_compiler('vala')
 
-vapi_dir = join_paths(meson.source_root(), 'vapi')
+vapi_dir = meson.current_source_dir() / 'vapi'
+add_project_arguments(['--vapidir', vapi_dir], language: 'vala')
 
 i18n = import('i18n')
 

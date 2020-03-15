@@ -6,6 +6,8 @@ bxt_launcher_sources = [
 ]
 
 bxt_launcher_deps = [
+  dependency('glib-2.0', version: '>= 2.48'),
+  dependency('gobject-2.0', version: '>= 2.48'),
   dependency('gio-2.0', version: '>= 2.48'),
   dependency('gtk+-3.0', version: '>= 3.18'),
   dependency('libgtop-2.0', version: '>= 2.32'),
@@ -19,12 +21,7 @@ bxt_launcher_sources += gnome.compile_resources('bxt_launcher-resources',
   c_name: 'bxt_launcher'
 )
 
-vala_args = [
-  '--target-glib=2.48',
-  '--vapidir=' + vapi_dir,
-]
-
 executable('bxt-launcher', bxt_launcher_sources,
-  vala_args: vala_args, dependencies: bxt_launcher_deps,
+  dependencies: bxt_launcher_deps,
   install: true,
 )
