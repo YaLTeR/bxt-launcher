@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 namespace BxtLauncher {
     [GtkTemplate (ui = "/yalter/BxtLauncher/window.ui")]
     public class Window : Gtk.ApplicationWindow {
@@ -23,6 +24,12 @@ namespace BxtLauncher {
         private string? bxt_path { get; set; }
 
         private Gtk.MessageDialog? dialog { get; set; }
+
+        [GtkChild]
+        private Gtk.Entry additional_cmdline_entry;
+
+        [GtkChild]
+        private Gtk.Expander additional_cmdline_expander;
 
         public Window (Gtk.Application app) {
             Object (application: app);
@@ -234,6 +241,18 @@ namespace BxtLauncher {
 
             string[] spawn_args = {"./hl_linux", "-steam"};
             string[] spawn_env = Environ.get ();
+
+            if (additional_cmdline_expander.expanded) {
+                string additional_cmdline_str = additional_cmdline_entry.text;
+                debug (@"Additional commands line arguments = $(additional_cmdline_str)");
+
+                string[] additional_cmdline = additional_cmdline_str.split(" ");
+                for (int i = 0; i < additional_cmdline.length; i++) {
+                    if (additional_cmdline[i] != "") {
+                        spawn_args += additional_cmdline[i];
+                    }
+                }
+            }
 
             var hl_ld_library_path = settings.get_string ("hl-ld-library-path");
             var hl_ld_preload = settings.get_string ("hl-ld-preload");
