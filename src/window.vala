@@ -24,6 +24,9 @@ namespace BxtLauncher {
 
         private Gtk.MessageDialog? dialog { get; set; }
 
+        [GtkChild]
+        private Gtk.ComboBoxText mod_combo_box;
+
         public Window (Gtk.Application app) {
             Object (application: app);
 
@@ -232,7 +235,7 @@ namespace BxtLauncher {
                 return;
             }
 
-            string[] spawn_args = {"./hl_linux", "-steam"};
+            string[] spawn_args = {"./hl_linux", "-steam", "-game", mod_combo_box.get_active_id ()};
             string[] spawn_env = Environ.get ();
 
             var hl_ld_library_path = settings.get_string ("hl-ld-library-path");
