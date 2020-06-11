@@ -239,13 +239,18 @@ namespace BxtLauncher {
             string[] spawn_env = Environ.get ();
 
             var hl_ld_library_path = settings.get_string ("hl-ld-library-path");
-            var hl_ld_preload = settings.get_string ("hl-ld-preload");
 
             // Add BXT in the end: gameoverlayrenderer really doesn't like being after BXT.
             var ld_preload = "";
-            if (hl_ld_preload != "") {
-                ld_preload += @"$hl_ld_preload:";
-            }
+            // TODO: gameoverlayrenderer seems to override dlsym(), which prevents BXT from doing
+            // the same, which results in some mod client libraries not being hooked (notably, the
+            // Opposing Force one). So, don't use the Steam LD_PRELOAD until this is resolved in
+            // BXT.
+            //
+            // var hl_ld_preload = settings.get_string ("hl-ld-preload");
+            // if (hl_ld_preload != "") {
+            //     ld_preload += @"$hl_ld_preload:";
+            // }
             ld_preload += bxt_path;
 
             bool found_pwd = false, found_ld_library_path = false, found_ld_preload = false;
