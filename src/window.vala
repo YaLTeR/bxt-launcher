@@ -53,6 +53,112 @@ namespace BxtLauncher {
                 fatal_error (@"Could not open the settings schema. Make sure the gschemas.compiled file is in the same folder as the launcher.\n\n$(e.message)");
                 return;
             }
+
+            detect_mod_folders.begin ();
+        }
+
+        private async void detect_mod_folders () {
+            var hl_pwd = settings.get_string ("hl-pwd");
+            if (hl_pwd == "") {
+                return;
+            }
+
+            var hl_dir = File.new_for_path (hl_pwd);
+
+            var mod_folders = new HashTable<string, string> (str_hash, str_equal);
+
+            try {
+                var enumerator = yield hl_dir.enumerate_children_async (
+                    "standard::type,standard::name,standard::display-name",
+                    FileQueryInfoFlags.NONE
+                );
+
+                while (true) {
+                    var files = yield enumerator.next_files_async (100);
+                    if (files.length () == 0) {
+                        break;
+                    }
+
+                    foreach (var file in files) {
+                        if (file.get_file_type () != FileType.DIRECTORY) {
+                            continue;
+                        }
+
+                        string? name;
+                        if (yield is_mod_folder (hl_dir.get_child (file.get_name ()), out name)) {
+                            mod_folders[file.get_name ()] =
+                                (name != null) ? name : file.get_display_name ();
+                        }
+                    }
+                }
+            } catch (Error _) {
+                // Proceed on any errors, the code below handles this case.
+            }
+
+            mod_combo_box.remove_all ();
+            if (mod_folders.size () == 0) {
+                mod_combo_box.append ("valve", "Half-Life");
+                mod_combo_box.append ("gearbox", "Opposing Force");
+                mod_combo_box.append ("bshift", "Blue Shift");
+                mod_combo_box.set_active_id ("valve");
+            } else {
+                string? first = null;
+                mod_folders.foreach((id, name) => {
+                    if (first == null) {
+                        first = id;
+                    }
+
+                    if (id == "valve") {
+                        mod_combo_box.prepend (id, name);
+                        first = id;
+                    } else {
+                        mod_combo_box.append (id, name);
+                    }
+                });
+
+                mod_combo_box.set_active_id (first);
+            }
+        }
+
+        private async bool is_mod_folder (File folder, out string? name) {
+            name = null;
+            var liblist = folder.get_child ("liblist.gam");
+
+            FileInputStream fis;
+            try {
+                fis = yield liblist.read_async ();
+            } catch (Error _) {
+                // For example, if liblist.gam does not exist.
+                return false;
+            }
+
+            try {
+                var dis = new DataInputStream (fis);
+
+                string? line;
+                while ((line = yield dis.read_line_utf8_async ()) != null) {
+                    if (line.length < 4 || line[0:4].ascii_casecmp ("game") != 0) {
+                        continue;
+                    }
+
+                    var first_quote = line.index_of_char ('"');
+                    if (first_quote == -1) {
+                        break;
+                    }
+
+                    var second_quote = line.index_of_char ('"', first_quote + 1);
+                    if (second_quote == -1) {
+                        break;
+                    }
+
+                    name = line[first_quote + 1:second_quote];
+                    break;
+                }
+            } catch (Error _) {
+                // If we couldn't get the display name just return true, it'll use the folder name.
+            }
+
+            return true;
         }
 
         [GtkCallback]
@@ -217,6 +323,9 @@ namespace BxtLauncher {
                 var hl_pwd = settings.get_string ("hl-pwd");
                 if (hl_pwd != "") {
                     launch_hl (hl_pwd);
+
+                    // Update mod folders afterwards because it resets the selected mod.
+                    detect_mod_folders.begin ();
                 }
             }
         }
