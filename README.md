@@ -1,4 +1,4 @@
-![image](https://user-images.githubusercontent.com/1794388/76060644-c862bf00-5f92-11ea-9603-849f02753bc1.png)
+![image](https://user-images.githubusercontent.com/1794388/84388243-e7f62d00-abfc-11ea-80bf-88281e1f7e71.png)
 
 # Bunnymod XT Launcher
 
