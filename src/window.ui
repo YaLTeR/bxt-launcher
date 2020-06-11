@@ -39,7 +39,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_bottom">16</property>
-            <property name="label" translatable="yes">Press the button to start Half-Life with Bunnymod XT.</property>
+            <property name="label" translatable="yes">Press the button to start the selected game with Bunnymod XT.</property>
           </object>
           <packing>
             <property name="expand">False</property>
