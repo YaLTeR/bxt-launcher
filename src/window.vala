@@ -136,7 +136,7 @@ namespace BxtLauncher {
                 var dis = new DataInputStream (fis);
 
                 string? line;
-                while ((line = yield dis.read_line_utf8_async ()) != null) {
+                while ((line = yield dis.read_line_utf8_async (Priority.DEFAULT, null, null)) != null) {
                     if (line.length < 4 || line[0:4].ascii_casecmp ("game") != 0) {
                         continue;
                     }
