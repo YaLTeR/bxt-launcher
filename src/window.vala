@@ -362,7 +362,7 @@ namespace BxtLauncher {
             // }
             ld_preload += bxt_path;
 
-            bool found_pwd = false, found_ld_library_path = false, found_ld_preload = false;
+            bool found_pwd = false, found_ld_library_path = false, found_ld_preload = false, found_steam_env = false;
             for (int i = 0; i < spawn_env.length; i++) {
                 var v = spawn_env[i];
 
@@ -382,6 +382,10 @@ namespace BxtLauncher {
                     found_ld_preload = true;
                     spawn_env[i] = @"LD_PRELOAD=$ld_preload";
                 }
+
+                if (v.has_prefix ("SteamEnv=")) {
+                    found_steam_env = true;
+                }
             }
 
             if (!found_pwd) {
@@ -392,6 +396,9 @@ namespace BxtLauncher {
             }
             if (!found_ld_preload) {
                 spawn_env += @"LD_PRELOAD=$ld_preload";
+            }
+            if (!found_steam_env) {
+                spawn_env += @"SteamEnv=1";
             }
 
             debug (@"Spawning:\n\tworking_directory = $hl_pwd\n\targv = $(string.joinv(", ", spawn_args))\n\tenvp =\n\t\t$(string.joinv("\n\t\t", spawn_env))\n");
