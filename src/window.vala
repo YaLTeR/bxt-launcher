@@ -25,7 +25,7 @@ namespace BxtLauncher {
         private Gtk.MessageDialog? dialog { get; set; }
 
         [GtkChild]
-        private Gtk.ComboBoxText mod_combo_box;
+        private unowned Gtk.ComboBoxText mod_combo_box;
 
         public Window (Gtk.Application app) {
             Object (application: app);
