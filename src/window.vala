@@ -107,6 +107,7 @@ namespace BxtLauncher {
                 mod_combo_box.append ("dod", "Day of Defeat");
                 mod_combo_box.append ("dmc", "Deathmatch Classic");
                 mod_combo_box.append ("ricochet", "Ricochet");
+                mod_combo_box.append ("ag", "OpenAG");
                 mod_combo_box.set_active_id ("valve");
             } else {
                 string? first = null;
