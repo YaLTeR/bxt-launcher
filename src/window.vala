@@ -100,6 +100,14 @@ namespace BxtLauncher {
                 mod_combo_box.append ("valve", "Half-Life");
                 mod_combo_box.append ("gearbox", "Opposing Force");
                 mod_combo_box.append ("bshift", "Blue Shift");
+                mod_combo_box.append ("cstrike", "Counter-Strike");
+                mod_combo_box.append ("czero", "Counter-Strike: Condition Zero");
+                mod_combo_box.append ("czeror", "Counter-Strike: Condition Zero Deleted Scenes");
+                mod_combo_box.append ("tfc", "Team Fortress Classic");
+                mod_combo_box.append ("dod", "Day of Defeat");
+                mod_combo_box.append ("dmc", "Deathmatch Classic");
+                mod_combo_box.append ("ricochet", "Ricochet");
+                mod_combo_box.append ("ag", "OpenAG");
                 mod_combo_box.set_active_id ("valve");
             } else {
                 string? first = null;

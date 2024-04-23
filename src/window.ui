@@ -79,8 +79,16 @@
                 <property name="active_id">valve</property>
                 <items>
                   <item id="valve">Half-Life</item>
-                  <item id="gearbox" translatable="yes">Opposing Force</item>
-                  <item id="bshift" translatable="yes">Blue Shift</item>
+                  <item id="gearbox">Opposing Force</item>
+                  <item id="bshift">Blue Shift</item>
+                  <item id="cstrike">Counter-Strike</item>
+                  <item id="czero">Counter-Strike: Condition Zero</item>
+                  <item id="czeror">Counter-Strike: Condition Zero Deleted Scenes</item>
+                  <item id="tfc">Team Fortress Classic</item>
+                  <item id="dod">Day of Defeat</item>
+                  <item id="dmc">Deathmatch Classic</item>
+                  <item id="ricochet">Ricochet</item>
+                  <item id="ag">OpenAG</item>
                 </items>
               </object>
               <packing>
